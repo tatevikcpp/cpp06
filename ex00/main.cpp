@@ -7,7 +7,7 @@ int main(int c, char **v)
         if (c == 2)
         {
             std::string str(v[1]);
-            ScalarConverter::checkTtype(str);
+            ScalarConverter::checkType(str);
         }
     }
     catch(const std::exception& e)

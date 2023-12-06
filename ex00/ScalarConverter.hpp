@@ -3,7 +3,7 @@
 class ScalarConverter
 {
     public:
-        static void checkTtype(const std::string& str);
+        static void checkType(std::string& str);
     private:
         // ScalarConverter();
         // ScalarConverter(const ScalarConverter& obj);
