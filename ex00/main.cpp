@@ -14,5 +14,4 @@ int main(int c, char **v)
     {
         std::cerr << e.what() << '\n';
     }
-    
 }
