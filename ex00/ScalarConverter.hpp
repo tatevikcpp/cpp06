@@ -13,6 +13,7 @@ class ScalarConverter
         // static void  Double(const std::string& str);
 
         static void  Char(double tod);
+        // static int  Int(double tod);
         static void  Int(double tod);
         static void  Float(double tod);
         static void  Double(double tod);

@@ -2,6 +2,10 @@
 #include  <cstdlib>
 #include <limits.h>
 #include <bits/stdc++.h>
+#include <math.h> // nan inf
+
+
+
 
 int ScalarConverter::valid_string(std::string& str)
 {
@@ -12,7 +16,16 @@ int ScalarConverter::valid_string(std::string& str)
     char *end = NULL;
     int i = 0;
 
-    if (isalpha(str[i]))
+    // std::cout << "ok " << std::strcmp(str.c_str(), "inf") << "\n";
+
+    if (std::strcmp(str.c_str(), "inf") == 0)
+    {
+        // std::cout << "str = inf \n";
+        return (0);
+    }
+
+
+    if (isalpha(str[i]) && !str[i + 1])
     {
         return (2);
     }
@@ -23,7 +36,15 @@ int ScalarConverter::valid_string(std::string& str)
     }
 
     if (str[i] == '-')
+    {
         i++;
+    }
+
+    if (str[i] == '.')
+    {
+        return (0);
+    }
+
     if (str[i] == '0' &&  str[i + 1] != '.')
     {
         std::cout << "0-ov sksvox\n";
@@ -44,18 +65,30 @@ int ScalarConverter::valid_string(std::string& str)
         }
         i++;
     }
+
     if (f_count > 1 || point > 2)
     {
         return (0); 
     }
+
+    int k = 0;
+    while (str.c_str()[k] != '\0')
+    {
+        if (str.c_str()[k] == '.' && str.c_str()[k + 1] == '\0')
+            return (0);
+        k++;
+    }
     return (1);
 }
 
-
-
 void ScalarConverter::Char(double tod)
 {
-    char c = 0;
+    if (isnan(tod) || isinf(tod))
+    {
+        std::cout << "char: impossible" << std::endl;
+        return ;
+    }
+
     if (tod >= 32 && tod <= 126)
     {
         std::cout << "char: " << "'" <<static_cast<char>(tod) << "'" <<std::endl;
@@ -66,23 +99,55 @@ void ScalarConverter::Char(double tod)
     }
 }
 
-void ScalarConverter::Int(double tod)
+// int ScalarConverter::Int(double tod) // TO DO toxe void te poxel int?
+// {
+//     if (isnan(tod) || isinf(tod))
+//     {
+//         std::cout << "int: impossible" << std::endl;
+//         return (1);
+//     }
+//     if (tod >= INT_MIN && tod <= INT_MAX)
+//     {
+//         std::cout << "int: " << static_cast<int>(tod) << std::endl;
+//     }
+//     else 
+//     {
+//         std::cout << "int: " << "Non displayable" << std::endl;
+//         return (0);
+//     }
+//     return (1);
+// }
+
+void ScalarConverter::Int(double tod) // TO DO toxe void te poxel int?
 {
-    int x = 0;
-    if (tod > INT_MIN && tod <= INT_MAX)
+    if (isnan(tod) || isinf(tod))
+    {
+        std::cout << "int: impossible" << std::endl;
+        return ;
+    }
+    if (tod >= INT_MIN && tod <= INT_MAX)
     {
         std::cout << "int: " << static_cast<int>(tod) << std::endl;
     }
     else 
     {
         std::cout << "int: " << "Non displayable" << std::endl;
+        return ;
     }
 }
+
 void ScalarConverter::Float(double tod)
 {
     double a = 0;
     double p = 0;
     float f = 0.0f;
+
+    if (isnan(tod) || isinf(tod))
+    {
+        std::cout << "float: " << tod << "f" << std::endl;
+        return ;
+    }
+
     if (tod >= -FLT_MAX && tod <= FLT_MAX)
     {
         f = static_cast<float>(tod);
@@ -103,7 +168,7 @@ void ScalarConverter::Double(double tod)
     double a = 0;
     double p = 0;
     a = modf(tod, &p);
-    if (a)
+    if (a || isnan(tod) || isinf(tod))
         std::cout << "double: " << tod << std::endl;
     else
         std::cout << "double: " << tod << ".0" << std::endl;
@@ -126,6 +191,9 @@ void ScalarConverter::checkType(std::string& str)
     {
         tod = strtod(str.c_str(), &end);
         Char(tod);
+
+        // if (Int(tod) == 0);
+        //     return ;
         Int(tod);
         Float(tod);
         Double(tod);
