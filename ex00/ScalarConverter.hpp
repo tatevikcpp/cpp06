@@ -17,6 +17,7 @@ class ScalarConverter
         static void  Int(double tod);
         static void  Float(double tod);
         static void  Double(double tod);
+        static std::string check(std::string& str)
 
     private:
         // ScalarConverter();

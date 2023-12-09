@@ -13,7 +13,8 @@ int ScalarConverter::valid_string(std::string& str)
     char *end = NULL;
     int i = 0;
 
-    if (std::strcmp(str.c_str(), "inf") == 0)
+    // if (std::strcmp(str.c_str(), "inf") == 0)
+    if (str == "inf")
     {
         return (0);
     }
@@ -160,6 +161,7 @@ void ScalarConverter::checkType(std::string& str)
     if (valid_string(str) == 2)
     {
         double tod = static_cast<double>(str.c_str()[0]);
+
         Char(tod);
         Int(tod);
         Float(tod);
@@ -167,15 +169,72 @@ void ScalarConverter::checkType(std::string& str)
     }
     else if (valid_string(str) == 1)
     {
-        tod = strtod(str.c_str(), &end);
+        // tod = strtod(str.c_str(), &end);
+        tod = static_cast<double>(str.c_str());
         Char(tod);
-
-        // if (Int(tod) == 0);
-        //     return ;
         Int(tod);
         Float(tod);
         Double(tod);
     }
     else
         std::cout << "sxal tox\n";
+}
+
+
+// void ScalarConverter::checkType(std::string& str)
+// {
+//     double tod = 0;
+//     int toi = 0;
+//     float tof = 0;
+//     char toch = 0;
+//     char *end;
+
+//     if (valid_string(str) == 2)
+//     {
+//         tod = static_cast<double>(str.c_str()[0]);
+//         toi = static_cast<int>(str.c_str()[0]);
+//         tof = static_cast<float>(str.c_str()[0]);
+//         // toch = static_cast<char>(str.c_str()[0]);
+
+//         Char(tod);
+//         Int(tod);
+//         Float(tod);
+//         Double(tod);
+//     }
+//     else if (valid_string(str) == 1)
+//     {
+//         tod = strtod(str.c_str(), &end);
+//         Char(tod);
+//         Int(tod);
+//         Float(tod);
+//         Double(tod);
+//     }
+//     else
+//         std::cout << "sxal tox\n";
+// }
+
+
+
+std::string ScalarConverter::check(std::string& str)
+{
+    size_t i = 0;
+    bool point = 0;
+
+    while (str.c_str()[i] != '\0')
+    {
+        if (str.c_str()[i] == '.' )
+        {
+            point = 1;
+        }
+        if (str.c_str()[i] == 'f' && point)
+        {
+            return ("flaot");
+        }
+        else if (point)
+        {
+            return ("double");
+        }
+        i++;
+    }
+    return (NULL);
 }
