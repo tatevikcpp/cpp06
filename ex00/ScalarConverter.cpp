@@ -4,9 +4,6 @@
 #include <bits/stdc++.h>
 #include <math.h> // nan inf
 
-
-
-
 int ScalarConverter::valid_string(std::string& str)
 {
     bool float_double = 0;
@@ -16,14 +13,10 @@ int ScalarConverter::valid_string(std::string& str)
     char *end = NULL;
     int i = 0;
 
-    // std::cout << "ok " << std::strcmp(str.c_str(), "inf") << "\n";
-
     if (std::strcmp(str.c_str(), "inf") == 0)
     {
-        // std::cout << "str = inf \n";
         return (0);
     }
-
 
     if (isalpha(str[i]) && !str[i + 1])
     {
@@ -35,9 +28,13 @@ int ScalarConverter::valid_string(std::string& str)
         return (1);
     }
 
-    if (str[i] == '-')
+    if (str[i] == '-' || str[i] == '+')
     {
         i++;
+    }
+    if (str[i] == '-' || str[i] == '+')
+    {
+        return (0);
     }
 
     if (str[i] == '.')
@@ -99,26 +96,7 @@ void ScalarConverter::Char(double tod)
     }
 }
 
-// int ScalarConverter::Int(double tod) // TO DO toxe void te poxel int?
-// {
-//     if (isnan(tod) || isinf(tod))
-//     {
-//         std::cout << "int: impossible" << std::endl;
-//         return (1);
-//     }
-//     if (tod >= INT_MIN && tod <= INT_MAX)
-//     {
-//         std::cout << "int: " << static_cast<int>(tod) << std::endl;
-//     }
-//     else 
-//     {
-//         std::cout << "int: " << "Non displayable" << std::endl;
-//         return (0);
-//     }
-//     return (1);
-// }
-
-void ScalarConverter::Int(double tod) // TO DO toxe void te poxel int?
+void ScalarConverter::Int(double tod) // TO DO toxel void te poxel int?
 {
     if (isnan(tod) || isinf(tod))
     {
