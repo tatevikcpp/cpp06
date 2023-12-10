@@ -14,10 +14,10 @@ class ScalarConverter
 
         static void  Char(double tod, int flag);
         // static int  Int(double tod);
-        static void  Int(std::string str, int flag);
-        static void  Float(std::string str, int flag);
-        static void  Double(std::string str, int flag);
-        static std::string check(std::string& str);
+        static void  Int(double tod, int flag);
+        static void  Float(double tod, int flag);
+        static void  Double(double tod, int flag);
+        // static std::string check(std::string& str);
 
     private:
         // ScalarConverter();
