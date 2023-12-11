@@ -4,106 +4,43 @@
 #include <bits/stdc++.h>
 #include <math.h> // nan inf
 
-// int ScalarConverter::valid_string(std::string& str)
-// {
-//     bool float_double = 0;
-//     int f_count = 0;
-//     int point = 1;
-//     double tod = 0;
-//     char *end = NULL;
-//     int i = 0;
-
-//     // if (std::strcmp(str.c_str(), "inf") == 0)
-//     // while(str.c_str()[i] != '\0')
-//     // {
-//         if (str == "inf")
-//         {
-//             return (0);
-//         }
-
-//         if (isalpha(str[i]) && str[i + 1] == '\0')
-//         {
-//             return (2);
-//         }
-
-//         if ((str[i] == '0' && !str[i + 1]))
-//         {
-//             return (1);
-//         }
-
-//         if (str[i] == '-' || str[i] == '+')
-//         {
-//             i++;
-//         }
-//         if (str[i] == '-' || str[i] == '+')
-//         {
-//             return (0);
-//         }
-
-//         if (str[i] == '.')
-//         {
-//             return (0);
-//         }
-
-//         if (str[i] == '0' &&  str[i + 1] != '.')
-//         {
-//             std::cout << "0-ov sksvox\n";
-//             return (0);
-//         }
-//     //     i++;
-//     // }
-
-//     tod = strtod(str.c_str(), &end);
-//     point = 1;
-//     while(end[i] != '\0')
-//     {
-//         if (end[i] == 'f')
-//             f_count++;
-//         if (end[i] == '.')
-//             point++;
-//         if (end[i] != 'f' && isalpha(end[i]))
-//         {
-//             return (0);
-//         }
-//         i++;
-//     }
-
-//     if (f_count > 1 || point > 2)
-//     {
-//         return (0); 
-//     }
-
-//     int k = 0;
-//     while (str.c_str()[k] != '\0')
-//     {
-//         if (str.c_str()[k] == '.' && str.c_str()[k + 1] == '\0')
-//             return (0);
-//         k++;
-//     }
-//     return (1);
-// }
-
-
-
 int ScalarConverter::valid_string(std::string& str)
 {
     int point = 0;
     int flt = 0;
 
-    if (str == "inf")
+    if (str == "inf" || str == "inff") //TO DO unchu ?
     {
         return (0);
     }
     
+    if (isnan(strtod(str.c_str(), NULL)) || isinf(strtod(str.c_str(), NULL)))
+    {
+        return (4);
+    }
+
     int i = 0;
     if (str.c_str()[i] == '-' || str.c_str()[i] == '+')
     {
+        if (str.c_str()[i + 1] == '\0')
+        {
+            return (2);
+        }
         i++;
     }
 
-    if (str.c_str()[i] == '0' && str.c_str()[i + 1] != '.')
+    if (str.c_str()[i] == '0' && str.c_str()[i + 1] != '.' )
     {
+        if (str.c_str()[i + 1] == '\0')
+        {
+            return (1);
+        }
+
         return (0);
+    }
+    if (str.c_str()[i] == '0' && str.c_str()[i + 1] == '\0')
+    {
+        return (1);
     }
     
     if (isalpha(str[i]) && str[i + 1] == '\0')
@@ -123,7 +60,6 @@ int ScalarConverter::valid_string(std::string& str)
 
     if (str.c_str()[i] == '.')
     {
-        // std::cout << "mtav\n";
         if (isdigit(str.c_str()[i - 1]) && (isdigit(str.c_str()[i + 1]) || str.c_str()[i + 1] == 'f'))
         {
             point++;
@@ -142,7 +78,6 @@ int ScalarConverter::valid_string(std::string& str)
 
     if (isalpha(str.c_str()[i]))
     {
-        std::cout << "is alpha \n";
         if (str.c_str()[i] == 'f' && str.c_str()[i+ 1] == '\0' && point)
         {
             flt++;
@@ -155,7 +90,6 @@ int ScalarConverter::valid_string(std::string& str)
 
     if (!isalpha(str.c_str()[i]) && !isdigit(str.c_str()[i]) && str.c_str()[i] != '\0')
     {
-        std::cout << "aregak ?\n";
         return (0);
     }
 
@@ -170,17 +104,11 @@ int ScalarConverter::valid_string(std::string& str)
             return (4);
         }
     }
-    return (1);
+    return (1); //TO DO +- int a gnum
 }
 
 void ScalarConverter::Char(double tod, int flag)
 {
-    if (isnan(tod) || isinf(tod))
-    {
-        std::cout << "char: impossible" << std::endl;
-        return ;
-    }
-
     if (flag == 1)
     {
         int i = static_cast<int> (tod);
@@ -204,7 +132,6 @@ void ScalarConverter::Char(double tod, int flag)
     else if (flag == 2) // TO DO parsingy uxxel CH tareri hamar !!!
     {
         char c = static_cast<char>(tod);
-        std::cout << "c =" << c << std::endl;
         if (tod >= 32 && tod <= 126)
         {
             std::cout << "char: " << "'" << c << "'" <<std::endl;
@@ -238,8 +165,6 @@ void ScalarConverter::Char(double tod, int flag)
     }
     else if (flag == 4)
     {
-        // std::cout << "double char-um\n";
-        std::cout << "tod = " << tod << std::endl;
         if (tod >= 32 && tod <= 126)
         {
             std::cout << "qast em aneum int - i \n";
@@ -257,42 +182,35 @@ void ScalarConverter::Char(double tod, int flag)
             return ;
         }
     }
-    // else
-    // {
-    //     std::cout << "char: " << "impossible" << std::endl;
-    //     return ;
-    // }
 }
 
-void ScalarConverter::Int(double tod, int flag) // TO DO toxel void te poxel int?
+void ScalarConverter::Int(double tod, int flag)
 {
-    if (isnan(tod) || isinf(tod))
-    {
-        std::cout << "int: impossible" << std::endl;
-        return ;
-    }
-
     if (flag == 1)
     {
-        int i = static_cast<int>(tod);
-        std::cout << "int: " << i << std::endl;
-        return ;
+        if (tod >= INT_MIN && tod <= INT_MAX)
+        {
+            int i = static_cast<int>(tod);
+            std::cout << "int: " << i << std::endl;
+            return ;
+        }
+        else 
+        {
+            std::cout << "int: " << "impossible" << std::endl;
+            return ;
+        }
     }
     else if (flag == 2)
     {
         char c = static_cast<char>(tod);
-
-        // if (tod >= INT_MIN && tod <= INT_MAX)
-        // {
-            std::cout << "int: " << static_cast<int>(c) << std::endl;
-            return ;
-        // }
+        std::cout << "int: " << static_cast<int>(c) << std::endl;
+        return ;
     }
     else if (flag == 3)
     {
-        float f = static_cast<char>(tod);
-        if (f >= INT_MIN && f <= INT_MAX)
+        if (tod >= INT_MIN && tod <= INT_MAX)
         {
+            float f = static_cast<float>(tod);
             std::cout << "int: " << static_cast<int>(f) << std::endl;
             return ;
         }
@@ -316,70 +234,59 @@ void ScalarConverter::Int(double tod, int flag) // TO DO toxel void te poxel int
             return ;
         }
     }
-    // else 
-    // {
-    //     std::cout << "int: " << "Non displayable" << std::endl;
-    //     return ;
-    // }
 }
 
 void ScalarConverter::Float(double tod, int flag)
 {
-        // std::cout << "offf\n";
-    if (isnan(tod) || isinf(tod))
-    {
-        std::cout << "float: " << tod << "f" << std::endl;
-        return ;
-    }
-
     if (flag == 1)
     {
         int i = static_cast<int>(tod);
         std::cout << "float: " << static_cast<float>(i) << ".0f" << std::endl;
-        // a = modf(f, &p);
-        // if (a)
-        //     std::cout << "float: " << f << "f" << std::endl;
-        // else
-        //     std::cout << "float: " << f << ".0f" << std::endl;
-        // return ;
         return ;
     }
     else if (flag == 2)
     {
         char c = static_cast<char>(tod);
-        std::cout << "float: " << tod << static_cast<float>(c) << "0.f" << std::endl;
+        std::cout << "float: " << static_cast<float>(c) << ".0f" << std::endl;
         return ;
     }
     else if (flag == 3)
     {
-        float f = static_cast<float>(tod); // TO DO erevi aranc f 
-        std::cout << "float: " << tod << f << std::endl;
+        double a = 0;
+        double p = 0;
+        float f = static_cast<float>(tod);
+        a = modf(f, &p);
+        if (a)
+            std::cout << "float: " << f << "f" << std::endl;
+        else
+            std::cout << "float: " << f << ".0f" << std::endl;
         return ;
     }
     else if (flag == 4)
     {
-        if (tod >= -FLT_MAX && tod <= FLT_MAX)
-        {
-            std::cout << "float: " << tod << "f" << std::endl;
+        // if (tod >= -FLT_MAX && tod <= FLT_MAX)
+        // {
+            double a = 0;
+            double p = 0;
+            float f = static_cast<float>(tod);
+            a = modf(f, &p);
+            if (a || isinf(tod))
+                std::cout << "float: " << f << "f" << std::endl;
+            else 
+                std::cout << "float: " << f << ".0f" << std::endl;
             return ;
-        }
-        else 
-        {
-            std::cout << "float: " << "impossible" << std::endl;
-            return ;
-        }
+        // }
+        // else 
+        // {
+        //     std::cout << "float: " << "impossible" << std::endl;
+        //     return ;
+        // }
 
     }
 }
 
 void ScalarConverter::Double(double tod, int flag)
 {
-    if (isnan(tod) || isinf(tod))
-    {
-        std::cout << "double: " << tod << std::endl;
-        return ;
-    }
-
     if (flag == 1)
     {
         int i = static_cast<int>(tod);
@@ -392,24 +299,29 @@ void ScalarConverter::Double(double tod, int flag)
         std::cout << "double: " << static_cast<double>(c) << ".0" << std::endl;
         return ;
     }
-    else if (flag == 3) // TO DO esim ?
+    else if (flag == 3)
     {
+        double a = 0;
+        double p = 0;
         float f = static_cast<float>(tod);
-        std::cout << "double: " << static_cast<double>(f) << std::endl;
+        a = modf(f, &p);
+        if (a)
+            std::cout << "double: " << f << std::endl;
+        else
+            std::cout << "double: " << f << ".0" << std::endl;
         return ;
     }
-    else if (flag == 4)
+    else if (flag == 4) //TO DO nan? nanf? +nanf? +inff?
     {
-        std::cout << "double: " << tod << std::endl;
+        double a = 0;
+        double p = 0;
+        a = modf(tod, &p);
+        if (a || isinf(tod))
+            std::cout << "float: " << tod << std::endl;
+        else
+            std::cout << "float: " << tod << ".0" << std::endl;
         return ;
     }
-    // double a = 0;
-    // double p = 0;
-    // a = modf(tod, &p);
-    // if (a || isnan(tod) || isinf(tod))
-    //     std::cout << "double: " << tod << std::endl;
-    // else
-    //     std::cout << "double: " << tod << ".0" << std::endl;
 }
 
 void ScalarConverter::checkType(std::string& str)
@@ -417,30 +329,38 @@ void ScalarConverter::checkType(std::string& str)
     double tod = 0;
     char *end;
 
-
     if (valid_string(str) == 1)
     {
-        std::cout << "1: \n";
+        std::cout << "int" << std::endl;
         double tod = strtod(str.c_str(), &end);
+        if (tod >= INT_MIN && tod <= INT_MAX)
+        {
+            Char(tod, 1);
+            Int(tod, 1);
+            Float(tod, 1);
+            Double(tod, 1);
+        }
+        else
+        {
+            std::cout << "int: impossible" << std::endl;
+            return ;
+        }
 
-        Char(tod, 1);
-        Int(tod, 1);
-        Float(tod, 1);
-        Double(tod, 1);
     }
     else if (valid_string(str) == 2)
     {
-        std::cout << "2: \n";
-        double tod = strtod(str.c_str(), &end);
+        std::cout << "char" << std::endl;
+        double tod = static_cast<double>(str.c_str()[0]);
 
         Char(tod, 2);
         Int(tod, 2);
         Float(tod, 2);
         Double(tod, 2);
+
     }
     else if (valid_string(str) == 3)
     {   
-        std::cout << "3: \n";
+        std::cout << "float" << std::endl;
         double tod = strtod(str.c_str(), &end);
 
         Char(tod, 3);
@@ -450,8 +370,7 @@ void ScalarConverter::checkType(std::string& str)
     }
     else if (valid_string(str) == 4)
     {
-        
-        std::cout << "4: \n";
+        std::cout << "double" << std::endl;
         double tod = strtod(str.c_str(), &end);
 
         Char(tod, 4);
@@ -460,62 +379,5 @@ void ScalarConverter::checkType(std::string& str)
         Double(tod, 4);
     }
     else
-        std::cout << "sxal tox\n";
+        std::cout << "Non displayable" << std::endl;
 }
-
-
-// void ScalarConverter::checkType(std::string& str)
-// {
-//     double tod = 0;
-//     int toi = 0;
-//     float tof = 0;
-//     char toch = 0;
-//     char *end;
-
-//     if (valid_string(str) == 2)
-//     {
-//         tod = static_cast<double>(str.c_str()[0]);
-//         toi = static_cast<int>(str.c_str()[0]);
-//         tof = static_cast<float>(str.c_str()[0]);
-//         // toch = static_cast<char>(str.c_str()[0]);
-
-//         Char(tod);
-//         Int(tod);
-//         Float(tod);
-//         Double(tod);
-//     }
-//     else if (valid_string(str) == 1)
-//     {
-//         tod = strtod(str.c_str(), &end);
-//         Char(tod);
-//         Int(tod);
-//         Float(tod);
-//         Double(tod);
-//     }
-//     else
-//         std::cout << "sxal tox\n";
-// }
-
-
-
-// std::string ScalarConverter::check(std::string& str)
-// {
-//     size_t i = 0;
-//     int point = 0;
-//     // int f = 0;
-
-//     while (str.c_str()[i] != '\0')
-//     {
-//         if (str.c_str()[i] == '.' )
-//         {
-//             point++;
-//         }
-//         i++;
-//     }
-//     if (str.c_str()[i - 1] == 'f' && point == 1)
-//         return ("float\n");
-//     else if (point)
-//         return ("double\n");
-//     else
-//         return ("int\n");
-// }
