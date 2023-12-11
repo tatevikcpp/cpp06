@@ -1,7 +1,7 @@
 #include "ScalarConverter.hpp"
 #include  <cstdlib>
 #include <limits.h>
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <math.h> // nan inf
 
 int ScalarConverter::valid_string(std::string& str)
@@ -9,11 +9,21 @@ int ScalarConverter::valid_string(std::string& str)
     int point = 0;
     int flt = 0;
 
-    if (str == "inf" || str == "inff") //TO DO unchu ?
+    if (str == "inf" || str == "inff" || str == "+nan" || str == "-nan") //TO DO inchu ?
     {
         return (0);
     }
     
+    if (str == "+inff" || str == "nanf" || str == "-inff")
+    {
+        return (3);
+    }
+
+    if (str == "+inf" || str == "nan" || str == "-inf")
+    {
+        return (4);
+    }
+
     if (isnan(strtod(str.c_str(), NULL)) || isinf(strtod(str.c_str(), NULL)))
     {
         return (4);
@@ -38,16 +48,23 @@ int ScalarConverter::valid_string(std::string& str)
 
         return (0);
     }
+
     if (str.c_str()[i] == '0' && str.c_str()[i + 1] == '\0')
     {
         return (1);
     }
     
-    if (isalpha(str[i]) && str[i + 1] == '\0')
+    // if (isalpha(str[i]) && str[i + 1] == '\0')
+    // {
+    //     return (2);
+    // }
+
+    if ((str[i - 1] != '+' || str[i - 1] == '-') && (!isdigit(str[i]) && str[i + 1] == '\0'))
     {
+        std::cout << "ch digit\n";
         return (2);
     }
-
+    
     while (isdigit(str.c_str()[i]))
     {
         i++;
@@ -104,7 +121,7 @@ int ScalarConverter::valid_string(std::string& str)
             return (4);
         }
     }
-    return (1); //TO DO +- int a gnum
+    return (1);
 }
 
 void ScalarConverter::Char(double tod, int flag)
@@ -114,7 +131,6 @@ void ScalarConverter::Char(double tod, int flag)
         int i = static_cast<int> (tod);
         if (i >= 32 && i <= 126)
         {
-            std::cout << "qast em aneum int - i \n";
             std::cout << "char: " << "'" << static_cast<char>(i) << "'" <<std::endl;
             return ;
         }
@@ -129,7 +145,7 @@ void ScalarConverter::Char(double tod, int flag)
             return ;
         }
     }
-    else if (flag == 2) // TO DO parsingy uxxel CH tareri hamar !!!
+    else if (flag == 2)
     {
         char c = static_cast<char>(tod);
         if (tod >= 32 && tod <= 126)
@@ -148,7 +164,6 @@ void ScalarConverter::Char(double tod, int flag)
         float f = static_cast<float> (tod);
         if (tod >= 32 && tod <= 126)
         {
-            std::cout << "qast em aneum int - i \n";
             std::cout << "char: " << "'" << static_cast<char>(f) << "'" <<std::endl;
             return ;
         }
@@ -167,7 +182,6 @@ void ScalarConverter::Char(double tod, int flag)
     {
         if (tod >= 32 && tod <= 126)
         {
-            std::cout << "qast em aneum int - i \n";
             std::cout << "char: " << "'" << static_cast<char>(tod) << "'" <<std::endl;
             return ;
         }
@@ -317,9 +331,9 @@ void ScalarConverter::Double(double tod, int flag)
         double p = 0;
         a = modf(tod, &p);
         if (a || isinf(tod))
-            std::cout << "float: " << tod << std::endl;
+            std::cout << "double: " << tod << std::endl;
         else
-            std::cout << "float: " << tod << ".0" << std::endl;
+            std::cout << "double: " << tod << ".0" << std::endl;
         return ;
     }
 }
@@ -331,7 +345,7 @@ void ScalarConverter::checkType(std::string& str)
 
     if (valid_string(str) == 1)
     {
-        std::cout << "int" << std::endl;
+        std::cout <<  "----- " << "int" << " -----" << std::endl;
         double tod = strtod(str.c_str(), &end);
         if (tod >= INT_MIN && tod <= INT_MAX)
         {
@@ -349,7 +363,7 @@ void ScalarConverter::checkType(std::string& str)
     }
     else if (valid_string(str) == 2)
     {
-        std::cout << "char" << std::endl;
+        std::cout <<  "----- " << "char" << " -----" << std::endl;
         double tod = static_cast<double>(str.c_str()[0]);
 
         Char(tod, 2);
@@ -360,7 +374,7 @@ void ScalarConverter::checkType(std::string& str)
     }
     else if (valid_string(str) == 3)
     {   
-        std::cout << "float" << std::endl;
+        std::cout <<  "----- " << "float" << " -----" << std::endl;
         double tod = strtod(str.c_str(), &end);
 
         Char(tod, 3);
@@ -370,7 +384,7 @@ void ScalarConverter::checkType(std::string& str)
     }
     else if (valid_string(str) == 4)
     {
-        std::cout << "double" << std::endl;
+        std::cout <<  "----- " << "double" << " -----" << std::endl;
         double tod = strtod(str.c_str(), &end);
 
         Char(tod, 4);

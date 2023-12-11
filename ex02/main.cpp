@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::cout << "lalala\n";
+    // std::cout << "lalala\n";
     Base *base;
     base = generate();
     identify(base);
