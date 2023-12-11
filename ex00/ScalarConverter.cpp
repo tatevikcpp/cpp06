@@ -8,7 +8,6 @@
 int ScalarConverter::valid_string(std::string& str)
 {
     int point = 0;
-    int flt = 0;
 
     const char *cstr = str.c_str();  
     if (str == "+inff" || str == "nanf" || str == "-inff")
@@ -277,7 +276,6 @@ void ScalarConverter::Double(double tod, int flag)
 
 void ScalarConverter::checkType(std::string& str)
 {
-    double tod = 0;
     char *end;
 
     if (valid_string(str) == 1)
