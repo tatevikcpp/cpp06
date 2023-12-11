@@ -3,17 +3,14 @@
 #include <limits.h>
 // #include <bits/stdc++.h>
 #include <math.h> // nan inf
+#include <float.h>
 
 int ScalarConverter::valid_string(std::string& str)
 {
     int point = 0;
     int flt = 0;
 
-    if (str == "inf" || str == "inff" || str == "+nan" || str == "-nan") //TO DO inchu ?
-    {
-        return (0);
-    }
-    
+    const char *cstr = str.c_str();  
     if (str == "+inff" || str == "nanf" || str == "-inff")
     {
         return (3);
@@ -24,60 +21,36 @@ int ScalarConverter::valid_string(std::string& str)
         return (4);
     }
 
-    if (isnan(strtod(str.c_str(), NULL)) || isinf(strtod(str.c_str(), NULL)))
-    {
-        return (4);
-    }
-
     int i = 0;
-    if (str.c_str()[i] == '-' || str.c_str()[i] == '+')
+
+    if (str.size() == 1 && isdigit(str[0]) == false)
     {
-        if (str.c_str()[i + 1] == '\0')
-        {
-            return (2);
-        }
+        return (2);
+    }    
+
+    if (cstr[i] == '-' || cstr[i] == '+')
+    {
         i++;
     }
 
-    if (str.c_str()[i] == '0' && str.c_str()[i + 1] != '.' )
+    if (cstr[i] == '0' && cstr[i + 1] != '.' &&  cstr[i + 1] != '\0')
     {
-        if (str.c_str()[i + 1] == '\0')
-        {
-            return (1);
-        }
-
         return (0);
     }
-
-    if (str.c_str()[i] == '0' && str.c_str()[i + 1] == '\0')
-    {
-        return (1);
-    }
     
-    // if (isalpha(str[i]) && str[i + 1] == '\0')
-    // {
-    //     return (2);
-    // }
-
-    if ((str[i - 1] != '+' || str[i - 1] == '-') && (!isdigit(str[i]) && str[i + 1] == '\0'))
-    {
-        std::cout << "ch digit\n";
-        return (2);
-    }
-    
-    while (isdigit(str.c_str()[i]))
+    while (isdigit(cstr[i]))
     {
         i++;
     }
 
-    if (str.c_str()[i] == '\0')
+    if (cstr[i] == '\0')
     {
         return (1);
     }
 
-    if (str.c_str()[i] == '.')
+    if (cstr[i] == '.')
     {
-        if (isdigit(str.c_str()[i - 1]) && (isdigit(str.c_str()[i + 1]) || str.c_str()[i + 1] == 'f'))
+        if (i != 0 && isdigit(cstr[i - 1]) && isdigit(cstr[i + 1]))
         {
             point++;
             i++;
@@ -88,40 +61,21 @@ int ScalarConverter::valid_string(std::string& str)
         }
     }
 
-    while (isdigit(str.c_str()[i]))
+    while (isdigit(cstr[i]))
     {
         i++;
     }
 
-    if (isalpha(str.c_str()[i]))
+    if (cstr[i] == '\0' && point)
     {
-        if (str.c_str()[i] == 'f' && str.c_str()[i+ 1] == '\0' && point)
-        {
-            flt++;
-        }
-        else
-        {
-            return (0);
-        }
+        return (4);
     }
 
-    if (!isalpha(str.c_str()[i]) && !isdigit(str.c_str()[i]) && str.c_str()[i] != '\0')
+    if (cstr[i] == 'f' && cstr[i + 1] == '\0' && point)
     {
-        return (0);
+        return (3);
     }
-
-    if (point == 1)
-    {
-        if (flt == 1)
-        {
-            return (3);
-        }
-        else
-        {
-            return (4);
-        }
-    }
-    return (1);
+    return (0);
 }
 
 void ScalarConverter::Char(double tod, int flag)
@@ -202,17 +156,9 @@ void ScalarConverter::Int(double tod, int flag)
 {
     if (flag == 1)
     {
-        if (tod >= INT_MIN && tod <= INT_MAX)
-        {
-            int i = static_cast<int>(tod);
-            std::cout << "int: " << i << std::endl;
-            return ;
-        }
-        else 
-        {
-            std::cout << "int: " << "impossible" << std::endl;
-            return ;
-        }
+        int i = static_cast<int>(tod);
+        std::cout << "int: " << i << std::endl;
+        return ;
     }
     else if (flag == 2)
     {
@@ -270,7 +216,7 @@ void ScalarConverter::Float(double tod, int flag)
         double p = 0;
         float f = static_cast<float>(tod);
         a = modf(f, &p);
-        if (a)
+        if (a || isinf(tod) || isinf(p))
             std::cout << "float: " << f << "f" << std::endl;
         else
             std::cout << "float: " << f << ".0f" << std::endl;
@@ -278,24 +224,15 @@ void ScalarConverter::Float(double tod, int flag)
     }
     else if (flag == 4)
     {
-        // if (tod >= -FLT_MAX && tod <= FLT_MAX)
-        // {
-            double a = 0;
-            double p = 0;
-            float f = static_cast<float>(tod);
-            a = modf(f, &p);
-            if (a || isinf(tod))
-                std::cout << "float: " << f << "f" << std::endl;
-            else 
-                std::cout << "float: " << f << ".0f" << std::endl;
-            return ;
-        // }
-        // else 
-        // {
-        //     std::cout << "float: " << "impossible" << std::endl;
-        //     return ;
-        // }
-
+        double a = 0;
+        double p = 0;
+        float f = static_cast<float>(tod);
+        a = modf(f, &p);
+        if (a || isinf(tod) || isinf(p))
+            std::cout << "float: " << f << "f" << std::endl;
+        else 
+            std::cout << "float: " << f << ".0f" << std::endl;
+        return ;
     }
 }
 
@@ -319,10 +256,10 @@ void ScalarConverter::Double(double tod, int flag)
         double p = 0;
         float f = static_cast<float>(tod);
         a = modf(f, &p);
-        if (a)
-            std::cout << "double: " << f << std::endl;
+        if (a || isinf(tod) || isinf(p))
+            std::cout << "double: " << static_cast<double>(f) << std::endl;
         else
-            std::cout << "double: " << f << ".0" << std::endl;
+            std::cout << "double: " << static_cast<double>(f) << ".0" << std::endl;
         return ;
     }
     else if (flag == 4) //TO DO nan? nanf? +nanf? +inff?
@@ -393,5 +330,7 @@ void ScalarConverter::checkType(std::string& str)
         Double(tod, 4);
     }
     else
+    {
         std::cout << "Non displayable" << std::endl;
+    }
 }
