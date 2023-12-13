@@ -2,16 +2,20 @@
 
 int main(int c, char **v)
 {
-    try
+    if (c == 2)
     {
-        if (c == 2)
+        try
         {
             std::string str(v[1]);
-            ScalarConverter::checkType(str);
+            ScalarConverter::convert(str);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
         }
     }
-    catch(const std::exception& e)
+    else
     {
-        std::cerr << e.what() << '\n';
+        std::cout << "Error: invalid argument" << std::endl;
     }
 }
